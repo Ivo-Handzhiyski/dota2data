@@ -7,15 +7,16 @@ var con = mysql.createConnection({
   database: "dota2data"
 });
 
-con.connect(function(err) {
+function CreateDataBase() {
+  con.connect(function(err) {
   if (err) throw err;
   console.log("Connected!");
   con.query("CREATE DATABASE IF NOT EXISTS dota2data", function (err, result) {
     if (err) throw err;
     console.log("Database created");
   });
-  CreateTables()
-});
+})};
+
 
 function CreateTables(){
   var sql_create_heroes = "CREATE TABLE IF NOT EXISTS heroes (hero_id INT, hero_name VARCHAR(255),  PRIMARY KEY (hero_id))";
@@ -44,3 +45,5 @@ function CreateTables(){
   // });
 
 }
+
+CreateDataBase();

@@ -2,7 +2,7 @@
   "name": "dota2data",
   "version": "1.0.0",
   "description": "",
-  "main": "insert_match_data.js",
+  "main": "init_db.js",
   "type": "module",
   "dependencies": {
     "bignumber.js": "^9.0.0",
