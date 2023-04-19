@@ -14,22 +14,22 @@ CREATE TABLE IF NOT EXISTS items (
     PRIMARY KEY (item_id)
 );
 
-CREATE TABLE IF NOT EXISTS match (
-    match_id INT,
+CREATE TABLE IF NOT EXISTS matches (
+    match_id INT UNIQUE,
     match_seq_num INT,
     duration INT,
-    engine INt,
+    engine INT,
     first_blood_time INT,
     flags INT,
     game_mode INT,
     human_players INT,
     pre_game_duration INT,
     radiant_score INT,
-    radiant_win BOOLEAN,
+    radiant_win BOOL,
     start_time INT,
     tower_status_dire INT,
     tower_status_radiant INT,
-    PRIMARY KEY(match_id)
+    PRIMARY KEY (match_id)
 );
 
 CREATE TABLE IF NOT EXISTS player_matches(
@@ -43,13 +43,9 @@ CREATE TABLE IF NOT EXISTS player_matches(
     backpack_2 BOOLEAN,
     deaths INT,
     denies INT,
-    gold INT,
     gold_per_min INT,
-    gold_spent INT,
-    hero_damage INT,
-    hero_healing INT,
     hero_id INT,
-    item_0: INT,
+    item_0 INT,
     item_1 INT,
     item_2 INT,
     item_3 INT,
@@ -62,17 +58,11 @@ CREATE TABLE IF NOT EXISTS player_matches(
     level INT,
     moonshard BOOLEAN,
     net_worth INT,
-    player_slot INT, --??
-    scaled_hero_damage INT,
-    scaled_hero_healing INT,
-    scaled_tower_damage INT,
-    team_number INT, --??
-    team_slot INT, --??
-    tower_damage INT,
+    player_slot INT,
+    team_number INT,
     xp_per_min INT,
-    PRIMARY KEY(account_id),
-    FOREIGN KEY(match_id) REFERENCES match(match_id),
-    FOREIGN KEY(hero_id) REFERENCES heroes(hero_id),
-    
+    PRIMARY KEY(match_id,player_slot),
+    FOREIGN KEY(match_id) REFERENCES matches(match_id),
+    FOREIGN KEY(hero_id) REFERENCES heroes(hero_id)
 );
 
