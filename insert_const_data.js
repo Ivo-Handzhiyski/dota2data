@@ -1,6 +1,6 @@
 import * as  mysql from 'mysql';
 import $ from "jquery";
-import fetch from "node-fetch";
+import fetch from "node-fetch"; 
 
 // create connection to the mysql
 var con = mysql.createConnection({
@@ -11,6 +11,7 @@ var con = mysql.createConnection({
 });
 
 // retrives data from the given url (must contain json)
+// TODO: make all the data in json files in order to minimize the api calls
 async function getData(url){
     const response = await fetch( url
   );

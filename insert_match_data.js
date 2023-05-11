@@ -96,8 +96,6 @@ for(let match_start_num = 0; match_start_num <= 100000; match_start_num += 100){
       }
       
     })
-    // console.log(data.result.matches[0].picks_bans[0])
-    // console.log(data.result.matches[0].players[0])
 }
 catch (error) {
   console.log(error)
