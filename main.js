@@ -2,7 +2,7 @@ import * as  mysql from 'mysql';
 import * as db from './init_db.js';
 import fetch from "node-fetch";
 
-//create connection to the mysql
+ // create connection to the mysql
 var con = mysql.createConnection({
     host: "127.0.0.1",
     user: "root",
@@ -10,7 +10,7 @@ var con = mysql.createConnection({
     database: "dota2data"
 });
 
-//Creates the database and the tables
+ // Creates the database and the tables
 db.CreateDataBase();
 db.CreateTables();
 

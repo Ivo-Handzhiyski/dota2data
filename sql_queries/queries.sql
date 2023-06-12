@@ -15,3 +15,4 @@ select hero_id, (( SUM(pm.kills) + SUM(pm.assists) ) / SUM(pm.deaths)) as KDA fr
 
 -- calculates the win percent of the player
 select pm.account_id, SUM(radiant_win) / COUNT(*) * 100 as Win_Percent, COUNT(*) as TotalGames  from player_matches pm join matches m on m.match_id = pm.match_id GROUP BY pm.account_id;
+

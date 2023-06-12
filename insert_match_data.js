@@ -26,14 +26,16 @@ for(let match_start_num = 0; match_start_num <= 100000; match_start_num += 100){
   try {
     
     getData('https://api.steampowered.com/IDOTA2Match_570/GetMatchHistoryBySequenceNum/v1/?access_token=55e1dd21804a3f3f7a49f7dfdf2c1924&start_at_match_seq_num=' + match_start_num + '&matches_requested=100', match_start_num).then((data) => {
-    // INSERT ITEMS
-
+    // INSERT ITEMS || Ignore lets it skips rows with the same PK
       let sql_matches = "INSERT IGNORE INTO dota2data.matches (match_id, match_seq_num, duration, `engine`, first_blood_time, flags, game_mode, human_players, pre_game_duration, radiant_score, radiant_win, start_time, tower_status_dire, tower_status_radiant) VALUES ?";
       let sql_player_matches = "INSERT IGNORE INTO dota2data.player_matches(account_id, match_id, aghanims_scepter, aghanims_shard, assists, backpack_0, backpack_1, backpack_2, deaths, denies, gold_per_min, hero_id, item_0, item_1, item_2, item_3, item_4, item_5, item_neutral, kills, last_hits, leaver_status, `level`, moonshard, net_worth, player_slot, team_number, xp_per_min) VALUES ?";
       let values_match = [];
       let values_player_match = [];
+      // data is of type json so we parse it here
       if(Object.keys(data).length !== 0){
         for (let index = 0; index < data.result.matches.length; index++) {
+          //set variables to get the data from the json
+          // basic data for the whole match
           const element = data.result.matches[index];
           let match_id = element.match_id;
           let match_seq_num = element.match_seq_num;
@@ -50,7 +52,7 @@ for(let match_start_num = 0; match_start_num <= 100000; match_start_num += 100){
           let tower_status_dire = element.tower_status_dire;
           let tower_status_radiant = element.tower_status_radiant;
           values_match.push([match_id, match_seq_num, duration, engine, first_blood_time, flags, game_mode, human_players, pre_game_duration, radiant_score, radiant_win, start_time, tower_status_dire, tower_status_radiant])
-        
+        // here we get the data for every person who has played in the match
           for(let i = 0; i < element.players.length; i++){
             const player_match = element.players[i];
             let account_id = player_match.account_id;
@@ -82,7 +84,6 @@ for(let match_start_num = 0; match_start_num <= 100000; match_start_num += 100){
             let xp_per_min = player_match.xp_per_min;
             values_player_match.push([account_id, match_id, aghanims_scepter, aghanims_shard, assists, backpack_0, backpack_1, backpack_2, deaths, denies, gold_per_min, hero_id, item_0, item_1, item_2, item_3, item_4, item_5, item_neutral, kills, last_hits, leaver_status, level, moonshard, net_worth, player_slot, team_number, xp_per_min])
           }
-         
         }
         con.query(sql_matches, [values_match], function (err, result) {
               if (err) throw err;
