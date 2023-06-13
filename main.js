@@ -12,9 +12,10 @@ var con = mysql.createConnection({
 });
 
 let AccessToken = "72d397e2fd675a756d03bbcaeefdb2cf";
-
+let Player_ID = "129074547";
 // Creates the database and the tables
 db.CreateDataBase(con);
 db.CreateTables(con);
 
-match.insert_match_data(AccessToken, con);
+// match.insert_match_data(AccessToken, con);
+match.insert_match_data_for_Player_ID(AccessToken, Player_ID, con);
