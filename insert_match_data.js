@@ -20,12 +20,14 @@ function getData(url, num){
 // most likely because of the numbers of api calls
 
 
+function insert_match_data(AccessToken){
+
 
 con.connect(function(err) {
 for(let match_start_num = 0; match_start_num <= 100000; match_start_num += 100){
   try {
     
-    getData('https://api.steampowered.com/IDOTA2Match_570/GetMatchHistoryBySequenceNum/v1/?access_token=55e1dd21804a3f3f7a49f7dfdf2c1924&start_at_match_seq_num=' + match_start_num + '&matches_requested=100', match_start_num).then((data) => {
+    getData('https://api.steampowered.com/IDOTA2Match_570/GetMatchHistoryBySequenceNum/v1/?access_token=' + AccessToken + '&start_at_match_seq_num=' + match_start_num + '&matches_requested=100', match_start_num).then((data) => {
     // INSERT ITEMS || Ignore lets it skips rows with the same PK
       let sql_matches = "INSERT IGNORE INTO dota2data.matches (match_id, match_seq_num, duration, `engine`, first_blood_time, flags, game_mode, human_players, pre_game_duration, radiant_score, radiant_win, start_time, tower_status_dire, tower_status_radiant) VALUES ?";
       let sql_player_matches = "INSERT IGNORE INTO dota2data.player_matches(account_id, match_id, aghanims_scepter, aghanims_shard, assists, backpack_0, backpack_1, backpack_2, deaths, denies, gold_per_min, hero_id, item_0, item_1, item_2, item_3, item_4, item_5, item_neutral, kills, last_hits, leaver_status, `level`, moonshard, net_worth, player_slot, team_number, xp_per_min) VALUES ?";
@@ -102,5 +104,6 @@ catch (error) {
   console.log(error)
 }}})
 
+}
 
-
+export {insert_match_data}
