@@ -6,6 +6,7 @@ Raw Data comes from the WebAPI that is provided by Valve.
 ## Techstack
 
 Created in NodeJS
+
 Using MySQL for Database
 
 ## TODO
