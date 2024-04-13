@@ -1,6 +1,7 @@
 import $ from "jquery";
 import * as mysql from "mysql";
 import fetch from "node-fetch";
+import fs from 'fs';
 
 // fetches a JSON for match data
 function getData(url, num) {
@@ -154,6 +155,8 @@ function insert_match_data(AccessToken, con) {
     }
   }
 }
+
+
 function insert_match_data_for_Player_ID(AccessToken, Player_ID, con) {
   try {
     getData(
@@ -269,17 +272,23 @@ function insert_match_data_for_Player_ID(AccessToken, Player_ID, con) {
           }
         }
         con.query(sql_matches, [values_match], function (err, result) {
-          if (err) throw err;
-          console.log("Number of records inserted: " + result.affectedRows);
+          if (err) {
+            console.error('Error inserting data into MySQL:', err);
+          } else {
+            console.log(result);
+            console.log(err)
+            console.log("Number of records inserted: " + result.affectedRows);
+          }
         });
         con.query(
           sql_player_matches,
           [values_player_match],
           function (err, result) {
-            if (err) throw err;
-            console.log(
-              "Number of player matches inserted: " + result.affectedRows
-            );
+            if (err) {
+              console.error('Error inserting player matches into MySQL:', err);
+            } else {
+              console.log("Number of player matches inserted: " + result.affectedRows);
+            }
           }
         );
       }
@@ -289,4 +298,59 @@ function insert_match_data_for_Player_ID(AccessToken, Player_ID, con) {
   }
 }
 
-export { insert_match_data, insert_match_data_for_Player_ID };
+function insert_heroes_data(con) {
+
+  // Read the heroes data from the JSON file
+  fs.readFile('const_data/heroes.json', 'utf8', (err, data) => {
+    if (err) {
+      console.error("Error reading heroes data file:", err);
+      return;
+    }
+
+    // Parse the JSON content
+  const heroesData = JSON.parse(data);
+  const heroes = heroesData.result.heroes;
+
+  // Prepare the SQL query
+  const sql = "INSERT IGNORE INTO heroes (hero_name, hero_id) VALUES ?";
+
+  // Prepare the values to be inserted
+  const values = heroes.map(hero => [hero.name.replace("npc_dota_hero_", ""), hero.id]);
+
+  // Execute the query
+  con.query(sql, [values], function (err, result) {
+    if (err) throw err;
+    console.log("Number of heroes inserted: " + result.affectedRows);
+  
+  })});
+}
+
+function insert_items_data(con) {
+
+  // Read the heroes data from the JSON file
+  fs.readFile('const_data/items.json', 'utf8', (err, data) => {
+    if (err) {
+      console.error("Error reading items data file:", err);
+      return;
+    }
+
+    // Parse the JSON content
+  const itemsData = JSON.parse(data);
+  const items = itemsData.items;
+
+  // Prepare the SQL query
+  const sql = "INSERT IGNORE INTO items (item_id, item_name, price, recipe, secret_shop, side_shop) VALUES ?";
+
+  // Prepare the values to be inserted
+  const values = items.map(item => [item.id, item.name.replace("item_", ""), item.cost, item.recipe, item.secret_shop, item.side_shop]);
+
+  // Execute the query
+  con.query(sql, [values], function (err, result) {
+    if (err) throw err;
+    console.log("Number of items inserted: " + result.affectedRows);
+  
+  })});
+}
+
+
+export { insert_match_data, insert_match_data_for_Player_ID , insert_heroes_data, insert_items_data};
